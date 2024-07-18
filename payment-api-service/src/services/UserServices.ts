@@ -11,20 +11,20 @@ interface Users {
 
 
 class UserServices {
-    async post({ firstName, lastName, email, cpf, balance }: Users) {
+    async post(data: Users) {
         try {
-            if (email == '' || !email.includes('@')) throw new ValidationException('email invalid');
-            if (cpf == '') throw new ValidationException('please enter your cpf');
+            if (data.email == '' || !data.email.includes('@')) throw new ValidationException('email invalid');
+            if (data.cpf == '') throw new ValidationException('please enter your cpf');
 
             const emailAlreadyRegistered = await prismaClient.users.findFirst({
                 where: {
-                    email: email
+                    email: data.email
                 }
             });
 
             const cpfAlreadyRegistered = await prismaClient.users.findFirst({
                 where: {
-                    cpf: cpf
+                    cpf: data.cpf
                 }
             });
 
@@ -33,11 +33,11 @@ class UserServices {
 
             const createUser = await prismaClient.users.create({
                 data: {
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    cpf: cpf,
-                    balance: balance
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    email: data.email,
+                    cpf: data.cpf,
+                    balance: data.balance
                 },
                 select: {
                     id: true,

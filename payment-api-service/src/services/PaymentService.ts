@@ -3,14 +3,14 @@ import prismaClient from "../prisma"
 
 interface Payments {
     amount: number,
-    user_cpf: string
+    userEmail: string
 }
 
 class PaymentService {
-    async post({ amount, user_cpf }: Payments){
+    async post(data: Payments){
         try {const existingUser = await prismaClient.users.findUnique({
             where: {
-                cpf: user_cpf
+                cpf: data.userEmail
             }
         });
 
@@ -18,24 +18,24 @@ class PaymentService {
             throw new ValidationException('user dosnt exists')
         }
 
-        if (existingUser.balance < amount ) {
+        if (existingUser.balance < data.amount ) {
             throw new ValidationException('user dosnt have enough balance for this payment')
         }
 
         const save = await prismaClient.payment.create({
             data: {
-            amount: amount,
-            user_cpf: user_cpf
+            amount: data.amount,
+            userEmail: data.userEmail
             }
         });
 
         const updateUser = await prismaClient.users.update({
             where: {
-                cpf: user_cpf
+                cpf: data.userEmail
             },
             data: {
                 balance: {
-                    decrement: amount
+                    decrement: data.amount
                 }
             }
         });
