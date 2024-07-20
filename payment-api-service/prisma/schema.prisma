@@ -21,12 +21,16 @@ model Users {
   email       String    @unique
   cpf         String    @unique
   payment     Payment[]  
+
+  @@map("users")
 }
 
 model Payment {
   id      Int       @id@default(autoincrement())
   amount  Float   
   date    DateTime  @default(now())  
-  user    Users     @relation(fields: [user_cpf], references: [cpf])
-  user_cpf  String
+  user    Users     @relation(fields: [userEmail], references: [email])
+  userEmail  String
+
+  @@map("payments")
 }
