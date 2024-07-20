@@ -8,18 +8,18 @@ interface Payments {
 
 class PaymentService {
     async post(data: Payments){
-        try {const existingUser = await prismaClient.users.findUnique({
+        try {const existingUser = await prismaClient.users.findFirst({
             where: {
-                cpf: data.userEmail
+                email: data.userEmail
             }
         });
 
         if (!existingUser) {
-            throw new ValidationException('user dosnt exists')
+            throw new ValidationException('user doesnt exists')
         }
 
         if (existingUser.balance < data.amount ) {
-            throw new ValidationException('user dosnt have enough balance for this payment')
+            throw new ValidationException('user doesnt have enough balance for this payment')
         }
 
         const save = await prismaClient.payment.create({
@@ -31,7 +31,7 @@ class PaymentService {
 
         const updateUser = await prismaClient.users.update({
             where: {
-                cpf: data.userEmail
+                email: data.userEmail
             },
             data: {
                 balance: {
