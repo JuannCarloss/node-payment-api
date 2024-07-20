@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
-import { UserController } from "./controllers/UserController";
 import { router } from "./routes";
 import errorHandlingMiddleware from "./middleware/ErrorHandlingMiddleware";
+import '../src/consumers/index'
 
 
 const app = express();
@@ -25,4 +25,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 app.use('/api', router)
 app.use(errorHandlingMiddleware)
 
-app.listen(8080, () => { console.log('servidor online') });
+app.listen(8081, () => { console.log('servidor online') });
