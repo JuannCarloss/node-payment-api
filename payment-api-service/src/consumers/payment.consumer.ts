@@ -7,7 +7,7 @@ type PaymentMessage = {
 };
 
 export async function paymentConsumer() {
-    const consumer = await kafkaConsumer("order-payment");
+    const consumer = await kafkaConsumer("payment");
     await consumer.run({
         eachMessage: async ({ message }) => {
             const toString = message.value!.toString();
